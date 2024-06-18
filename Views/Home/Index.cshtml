@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
 <div class="carousel slide carousel-fade carousel-dark carousel-container" id="homeCarousel" data-bs-ride="carousel" data-bs-interval="5000" data-pause="true" data-bs-wrap="true">
@@ -42,11 +42,11 @@
 	</button>
 </div>
 
-<div class="row">
-	<div class="col-sm-12 col-md-6 green-border">
-		<h3 class="text-center"><a asp-action="GetProducts" asp-controller="Product">Products</a></h3>
+<div class="container-fluid">
+	<div class="col-sm-12 col-md-6 green-border float-md-start">
+		<h3 class="text-center"><a asp-action="Products" asp-controller="Product" class="text-decoration-none">Products</a></h3>
 	</div>
-	<div class="col-sm-12 col-md-6">
-
+	<div class="col-sm-12 col-md-6 green-border float-md-end">
+		<h3 class="text-center"><a asp-action="News" asp-controller="Home" class="text-decoration-none">News</a></h3>
 	</div>
 </div>

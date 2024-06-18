@@ -18,11 +18,12 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  margin-bottom: 0px;
 }
 
 .navbar-style {
     height: 7vh;
+    box-shadow: rgba(255, 215, 0, 0.5) 0px 5px;
 }
 
 .navbar-brand-height {
@@ -32,6 +33,7 @@ body {
 .carousel-container {
     width: 80vw;
     height: 70vh;
+    margin: 5px auto;
 }
 
 .carousel-image-size {
@@ -44,7 +46,20 @@ body {
 }
 
 .border-secondary-top {
-    border-top: 2px solid #dc1414;
     border: none;
+    border-top: 2px solid #dc1414 !important;
 }
 
+.border-secondary-end {
+    border: none;
+    border-right: 2px solid #dc1414 !important;
+}
+
+.footer-items {
+    list-style-type: none;
+    text-align: center;
+}
+
+.footer-secondary-bottom {
+    border-bottom: 1px solid #dc1414;
+}

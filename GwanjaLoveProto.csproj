@@ -6,4 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="GwanjaLove-MVC\**" />
+    <Content Remove="GwanjaLove-MVC\**" />
+    <EmbeddedResource Remove="GwanjaLove-MVC\**" />
+    <None Remove="GwanjaLove-MVC\**" />
+  </ItemGroup>
+
 </Project>

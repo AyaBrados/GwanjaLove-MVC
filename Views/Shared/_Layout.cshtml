@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - GwanjaLoveProto</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" asp-href-include="~/GwanjaLoveProto.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" asp-href-include="~/css/site.css" asp-append-version="true" />
     <link rel="icon" type="image/x-icon" href="~/CanabisLeafVector.ico" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 navbar-style">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-3 navbar-style">
             <div class="container-fluid bg-success">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/images/ScientistsCheckingHemp.jpg" class="navbar-brand-height" alt="Scientists inspecting a Hemp Leaf with magnifying glasses" />
@@ -27,10 +26,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Home">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Products">Products</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Services" asp-action="Services">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Services">Services</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -40,16 +39,33 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-secondary-top footer">
+    <footer class="border-secondary-top footer p-2 mt-5">
         <div class="row">
-            <div class="col-sm-12 col-md-4">
-
+            <div class="col-sm-12 col-md-4 border-secondary-end">
+                <h6 class="text-success footer-secondary-bottom pb-1">Quick Links</h6>
+                <ul class="footer-items">
+                    <li>
+                        <a asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Product" asp-action="Products" class="text-decoration-none">Products</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Service" asp-action="Services" class="text-decoration-none">Services</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Order" asp-action="Orders" class="text-decoration-none">Orders</a>
+                    </li>
+                    <li>
+                        <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none">Privacy</a>
+                    </li>
+                </ul>
             </div>
             <div class="col-sm-12 col-md-4">
 
@@ -59,7 +75,7 @@
             </div>
         </div>
         <span class="text-muted">
-            &copy; 2024 - GwanjaLoveProto <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - GwanjaLoveProto
         </span>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
