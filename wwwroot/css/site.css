@@ -63,3 +63,14 @@ body {
 .footer-secondary-bottom {
     border-bottom: 1px solid #dc1414;
 }
+.card-header-background {
+    background-color: #dc1414;
+}
+
+.card-position {
+    margin: 5px auto;
+}
+
+.site-primary-background {
+    background-color: #00ff00;
+}
