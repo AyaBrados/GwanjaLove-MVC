@@ -4,5 +4,6 @@
 	{
 		public int CategoryId { get; set; }
 		public bool IsInStock { get; set; }
+		public Category Category { get; set; }
 	}
 }

@@ -1,12 +1,17 @@
+using GwanjaLoveProto.Data;
 using GwanjaLoveProto.Data.Implementations;
 using GwanjaLoveProto.Data.Interfaces;
 using GwanjaLoveProto.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IRepositoryBase<Product>, ProductRepositoryBase>();
+
+builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
