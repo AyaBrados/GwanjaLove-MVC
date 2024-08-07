@@ -18,12 +18,16 @@ html {
 }
 
 body {
-  margin-bottom: 0px;
+  overflow-x: hidden;
+}
+
+.header-style {
+    margin-bottom: 60px;
 }
 
 .navbar-style {
     height: 7vh;
-    box-shadow: rgba(255, 215, 0, 0.5) 0px 5px;
+    box-shadow: 0 0 0 0.1rem #00ff00;
 }
 
 .navbar-brand-height {
@@ -73,4 +77,47 @@ body {
 
 .site-primary-background {
     background-color: #00ff00;
+}
+
+.card-height {
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+.card-footer-style {
+    margin: 1px auto;
+    background-color: lightgray;
+}
+
+.card-background {
+    background-color: lightgray;
+}
+
+.card-img-style {
+    height: 40vh;
+    border-radius: 0px;
+}
+
+.footer-img {
+    height: 10vh;
+}
+
+.footer-style {
+    height: 31vh;
+}
+
+.footer-scroll {
+    overflow-y: scroll;
+}
+
+.rasta-radial-background {
+    background: radial-gradient(ellipse at top, #00ff00, #dc1414), radial-gradient(ellipse at bottom, #00ff00, #dc1414);
+}
+
+footer > div > ul > li > a:link, footer > div > ul > li > a {
+    color: white;
+}
+
+footer > div > ul > li > a:hover {
+    color: dodgerblue;
 }

@@ -43,48 +43,114 @@
 </div>
 
 <div class="row container-fluid">
-	<div class="col-sm-12 col-md-6 green-border float-md-start overflow-auto">
+	<div class="col-sm-12 col-md-6 green-border float-md-start card-height">
 		<h3 class="text-center"><a asp-action="Products" asp-controller="Product" class="text-decoration-none">Products</a></h3>
         <div class="row">
-            <div class="card col-md-10 col-sm-10 card-position p-0">
-                <h4 class="card-header card-header-background">Super Growers</h4>
-                <img class="card-img-top" src="images/LightPurple.jpg" alt="Light Purple tree inside!" />
+            <div class="card col-10 card-position p-0 card-background">
+				<h4 class="card-header card-header-background">Purple Kush</h4>
+                <img class="card-img-top card-img-style" src="~/images/purpleBud.jpg" alt="Light Purple tree inside!" />
                 <div class="card-body bg-warning">
-                    <h5 class="card-title">Purple Kush</h5>
-                    <h5 class="card-subtitle">Details of the plant</h5>
+					<h5 class="card-title">Details of the bud</h5>
                     <p class="card-text lead">
-                        This tree has been carefully grown within an indoor environment. The conditions are closely monitored and the quality is extreme!
-                        It has a lot of benefits when choosing this grow method. Most experts also indicate that the taste and quality is more improved than outdoor.
+                        Purple kush is a powerful indica dominant hybrid grown in the great outdoors. This strain has a great terpene profile and can be used to create top of the range
+						extracts!
                     </p>
-                    <button type="button" class="card-link site-primary-background" asp-action="Products" asp-controller="Product">
-                        more info
-                    </button>
+					<div class="text-center">
+						<button type="button" class="card-link site-primary-background" asp-action="Products" asp-controller="Product">
+							more info
+						</button>
+					</div>
                 </div>
-                <div class="card-footer">
-                    Number 1
-                </div>
+                <table class="card-footer table-borderless card-footer-style">
+					<thead>
+						<tr>
+							<td>THC <i class="fa-regular fa-percentage"></i></td>
+							<td class="px-md-2">Stickiness <i class="fa-solid fa-hands-asl-interpreting"></i></td>
+							<td class="px-md-2">Flavour <i class="fa-solid fa-bong"></i></td>
+							<td class="px-md-2">Aroma <i class="fa-solid fa-joint"></i></td>
+							<td>Price R/g</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>23</td>
+							<td class="ps-md-2">Heavy</td>
+							<td class="px-md-2">Earthy, grape</td>
+							<td class="px-md-2">Sweet &amp; Tropical</td>
+							<td>25</td>
+						</tr>
+					</tbody>
+				</table>
             </div>
-            <div class="card col-md-10 col-sm-10 card-position p-0">
-                <div class="card-header card-header-background">Super Growers</div>
-                <img class="card-img-top" src="images/LightPurple.jpg" alt="Light Purple tree inside!" />
-                <div class="card-body bg-warning">
-                    <h5 class="card-title">Purple Kush</h5>
-                    <h5 class="card-subtitle">Details of the plant</h5>
-                    <p class="card-text lead">
-                        This tree has been carefully grown within an indoor environment. The conditions are closely monitored and the quality is extreme!
-                        It has a lot of benefits when choosing this grow method. Most experts also indicate that the taste and quality is more improved than outdoor.
-                    </p>
-                    <a class="card-link text-decoration-none" href="#">
-                        more info
-                    </a>
-                </div>
-                <div type="button" class="card-footer btn p-1" style="background-color: purple;">
-                    #1
-                </div>
+            <div class="card col-10 card-position p-0 card-background">
+				<h4 class="card-header card-header-background">Khalifa Kush</h4>
+				<img class="card-img-top" src="images/LightPurple.jpg" alt="Light Purple tree inside!" />
+				<div class="card-body bg-warning">
+					<h5 class="card-title">Details of the plant</h5>
+					<p class="card-text lead">
+						This tree has been carefully brought up within an indoor environment. Invest into this beautiful tree that can produce a great yield
+						of suculent buds.
+					</p>
+					<button type="button" class="card-link site-primary-background" asp-action="Products" asp-controller="Product">
+						more info
+					</button>
+				</div>
+				<table class="card-footer table-borderless card-footer-style">
+					<thead>
+						<tr>
+							<td>THC <i class="fa-regular fa-percentage"></i></td>
+							<td class="px-md-2">Yield <i class="fa-brands fa-canadian-maple-leaf"></i></td>
+							<td class="px-md-2">Flavour <i class="fa-solid fa-bong"></i></td>
+							<td class="px-md-2">Aroma <i class="fa-solid fa-joint"></i></td>
+							<td>Price R</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Max 26</td>
+							<td class="ps-md-2">100g/m<sup>2</sup></td>
+							<td class="px-md-2">Earthy, spicy</td>
+							<td class="px-md-2">Earthy &amp; Potent</td>
+							<td>150</td>
+						</tr>
+					</tbody>
+				</table>
             </div>
         </div>
 	</div>
-	<div class="col-sm-12 col-md-6 green-border float-md-end">
+	<div class="col-sm-12 col-md-6 green-border float-md-end card-height">
 		<h3 class="text-center"><a asp-action="News" asp-controller="Home" class="text-decoration-none">News</a></h3>
+		<div class="row">
+			<div class="card col-10 card-position p-0 card-background">
+				<img class="card-img-top card-img-style" src="~/images/GermanyLegalizes.png" alt="Light Purple tree inside!" />
+				<div class="card-body bg-warning">
+					<h5 class="card-title">Germany legalizes Marijuana</h5>
+					<p class="card-text lead">
+						A country with engineering excellence and a strong economy surely needs some alleviation/relief from hard work. What better way to
+						achieve this through steaming a nice bud or two after a good day's work.
+					</p>
+					<div class="text-center">
+						<a class="card-link btn site-primary-background" href="https://www.bbc.com/news/world-europe-68674813" target="_blank">
+							more info
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="card col-10 card-position p-0 card-background">
+				<img class="card-img-top card-img-style" src="~/images/purpleBud.jpg" alt="Light Purple tree inside!" />
+				<div class="card-body bg-warning">
+					<h5 class="card-title">Germany legalizes Marijuana</h5>
+					<p class="card-text lead">
+						A country with engineering excellence and a strong economy surely needs some alleviation/relief from hard work. What better way to
+						achieve this through steaming a nice bud or two after a good day's work.
+					</p>
+					<div class="text-center">
+						<a class="card-link btn site-primary-background" href="https://www.bbc.com/news/world-europe-68674813" target="_blank">
+							more info
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
