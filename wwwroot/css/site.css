@@ -121,3 +121,7 @@ footer > div > ul > li > a:link, footer > div > ul > li > a {
 footer > div > ul > li > a:hover {
     color: dodgerblue;
 }
+
+.navbar-welcome {
+    margin: 0px auto;
+}

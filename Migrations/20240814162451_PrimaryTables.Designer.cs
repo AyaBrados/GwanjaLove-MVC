@@ -4,6 +4,7 @@ using GwanjaLoveProto.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GwanjaLoveProto.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240814162451_PrimaryTables")]
+    partial class PrimaryTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -285,8 +288,6 @@ namespace GwanjaLoveProto.Migrations
 
                     b.HasKey("Id");
 
-
-
                     b.ToTable("PaymentMethods");
                 });
 
@@ -339,21 +340,11 @@ namespace GwanjaLoveProto.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId").IsUnique().IsDescending(false)
-                        .HasDatabaseName("ProductCategoryIndex")
-                        .HasFilter("[CategoryId] IS NOT NULL");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("StrainStickinessId");
 
                     b.HasIndex("StrainTypeId");
-
-                    b.HasIndex("Name").IsUnique().IsDescending(false)
-                        .HasDatabaseName("ProductNameIndex")
-                        .HasFilter("[Name] IS NOT NULL");
-                    
-                    b.HasIndex("Name").IsUnique().IsDescending(false)
-                        .HasDatabaseName("ProductNameIndex")
-                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Products");
                 });
@@ -391,10 +382,6 @@ namespace GwanjaLoveProto.Migrations
 
                     b.HasIndex("SurveyId");
 
-                    b.HasIndex("Name").IsUnique().IsDescending(false)
-                        .HasDatabaseName("QuestionNameIndex")
-                        .HasFilter("[Name] IS NOT NULL");
-
                     b.ToTable("Questions");
                 });
 
@@ -425,10 +412,6 @@ namespace GwanjaLoveProto.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name").IsUnique().IsDescending(false)
-                        .HasDatabaseName("SensamilliaServiceNameIndex")
-                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("SensamilliaServices");
                 });
@@ -461,10 +444,6 @@ namespace GwanjaLoveProto.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name").IsUnique().IsDescending(false)
-                        .HasDatabaseName("StrainStickinessNameIndex")
-                        .HasFilter("[Name] IS NOT NULL");
-
                     b.ToTable("StrainStickiness");
                 });
 
@@ -495,10 +474,6 @@ namespace GwanjaLoveProto.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name").IsUnique().IsDescending(false)
-                        .HasDatabaseName("StrainTypeNameIndex")
-                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("StrainTypes");
                 });
@@ -531,10 +506,6 @@ namespace GwanjaLoveProto.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name").IsUnique().IsDescending(false)
-                        .HasDatabaseName("SurveyNameIndex")
-                        .HasFilter("[Name] IS NOT NULL");
-
                     b.ToTable("Surveys");
                 });
 
@@ -557,7 +528,8 @@ namespace GwanjaLoveProto.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName").IsUnique().IsDescending(false)
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
@@ -644,13 +616,10 @@ namespace GwanjaLoveProto.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .IsUnique()
-                        .IsDescending(false)
                         .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .IsDescending(false)
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 

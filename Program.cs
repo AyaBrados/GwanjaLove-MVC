@@ -2,7 +2,9 @@ using GwanjaLoveProto.Data;
 using GwanjaLoveProto.Data.Implementations;
 using GwanjaLoveProto.Data.Interfaces;
 using GwanjaLoveProto.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,16 @@ builder.Services.AddScoped<IRepositoryBase<Product>, ProductRepositoryBase>();
 
 builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<AppUser, IdentityRole>(opts => {
+    opts.Password.RequiredLength = 6;
+    opts.Password.RequireNonAlphanumeric = false;
+    opts.Password.RequireLowercase = false;
+    opts.Password.RequireUppercase = false;
+    opts.Password.RequireDigit = false;
+    opts.User.RequireUniqueEmail = true;
+    opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+}).AddEntityFrameworkStores<AppDBContext>();
 
 var app = builder.Build();
 
@@ -28,6 +40,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
