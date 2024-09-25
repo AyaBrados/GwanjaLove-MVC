@@ -79,6 +79,14 @@ body {
     background-color: #00ff00;
 }
 
+.site-secondary-background {
+    background-color: gold;
+}
+
+.site-tertiary-background {
+    background-color: #ff0000;
+}
+
 .card-height {
     height: 70vh;
     overflow-y: scroll;
@@ -124,4 +132,8 @@ footer > div > ul > li > a:hover {
 
 .navbar-welcome {
     margin: 0px auto;
+}
+
+.float-left {
+    margin-right: auto;
 }

@@ -1,0 +1,64 @@
+﻿@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="modal fade" id="registerModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <form asp-controller="Account" asp-action="Register" method="post" class="modal-content site-tertiary-background" enctype="multipart/form-data">
+            <div class="modal-header">
+                <h2 class="modal-title">Register</h2>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" data-bs-target="#registerModal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+                <div class="mb-3">
+                    <label asp-for="UserName" id="#userNameRegister" class="form-label"></label>
+                    <input asp-for="UserName" id="#userNameRegister" class="form-control" />
+                    <div><span asp-validation-for="UserName" class="text-info"></span></div>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email" id="#emailRegister" class="form-label"></label>
+                    <input asp-for="Email" id="#emailRegister" class="form-control" />
+                    <div><span asp-validation-for="Email" class="text-info"></span></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-12 col-md-6">
+                        <label asp-for="Password" id="#passwordRegister" class="form-label"></label>
+                        <input asp-for="Password" id="#passwordRegister" class="form-control" />
+                        <div><span asp-validation-for="Password" class="text-info"></span></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <div><span asp-validation-for="ConfirmPassword" class="text-info"></span></div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-12 col-md-4">
+                        <label asp-for="Role" class="form-label"></label>
+                        <select class="form-select" asp-for="Role" asp-items="@ViewBag.Roles">
+                            Choose your role...
+                        </select>
+                        <div><span asp-validation-for="Role" class="text-info"></span></div>
+                    </div>
+                    <div class="col-sm-12 col-md-8">
+                        <label asp-for="AvatarImage" class="form-label"></label>
+                        <input asp-for="AvatarImage" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" asp-controller="Account" asp-action="Login" id="registerLoginBtn" class="site-secondary-background">Login</button>
+                <button class=" site-primary-background" type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/Register.js"></script>
+}

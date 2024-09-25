@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string? controller =
+    ViewContext.RouteData.Values["controller"]?.ToString();
+    string? action =
+        ViewContext.RouteData.Values["action"]?.ToString();
+    ViewData["returnUrl"] = !string.IsNullOrEmpty(controller) && !string.IsNullOrEmpty(action) ? $"/{controller}/{action}" : "/Home/Index";
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -23,25 +30,27 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link text-dark" asp-controller="Home" asp-action="Index" id="homeAnchor">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Products">Products</a>
+                        <a class="nav-link text-dark" asp-controller="Product" asp-action="Products">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Orders">Orders</a>
+                        <a class="nav-link text-dark" asp-controller="Order" asp-action="Orders">Orders</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Services">Services</a>
+                        <a class="nav-link text-dark" asp-controller="Service" asp-action="Services">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link text-dark" asp-controller="Service" asp-action="KnowledgeBase">Knowledge Base</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav navbar-welcome">
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
-                        <li class="nav-link">Hello, @User.Identity.Name</li>
+                        <li class="nav-link">Hello, @User.Identity.Name
+                            <img profile-user="@User.Identity.Name" src="" alt="User Profile Picture" />
+                        </li>
                         <li class="nav-item">
                             <form asp-controller="Account" asp-action="Logout" method="post">
                                 <button class="btn btn-link nav-link" type="submit">Log Out</button>
@@ -51,10 +60,10 @@
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+                            <a class="nav-link" asp-controller="Account" asp-action="Register" id="registerBtn">Register</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Account" asp-action="Login">Log in</a>
+                            <a class="nav-link" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewData["returnUrl"]" id="loginBtn">Log in</a>
                         </li>
                     }
                 </ul>
@@ -62,12 +71,12 @@
         </nav>
     </header>
     <div class="container-fluid">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3" id="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="row border-secondary-top px-2 footer-style rasta-radial-background">
+    <footer class="row border-secondary-top px-2 footer-style rasta-radial-background" id="footer">
         <div class="col-sm-12 col-md-4 border-secondary-end">
             <h6 class="text-success footer-secondary-bottom pb-1">Quick Links</h6>
             <ul class="footer-items">
@@ -84,11 +93,11 @@
                     <a asp-controller="Order" asp-action="Orders" class="text-decoration-none">Orders</a>
                 </li>
                 <li>
-                    <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none">Privacy</a>
+                    <a asp-controller="Service" asp-action="KnowledgeBase" class="text-decoration-none">Knowledge Base</a>
                 </li>
             </ul>
             <span class="text-muted">
-                &copy; 2024 - GwanjaLoveProto
+                &copy; @DateTime.Now.Year - GwanjaLoveProto
             </span>
         </div>
         <div class="col-sm-12 col-md-4 border-secondary-end footer-style footer-scroll">
@@ -96,28 +105,33 @@
             <ul class="footer-items overflow-auto">
                 <li>
                     <a href="http://tastypuff.com" target="_blank">
-                    <img src="~/images/TastyPuffLogo.jpeg" asp-controller="Home" asp-action="Index" class="footer-img" alt="TastyPuff Logo" />
+                    <img src="~/images/TastyPuffLogo.jpeg" class="footer-img" alt="TastyPuff Logo" />
                     </a>
                 </li>
                 <li>
                     <a href="http://www.barneysfarm.com" target="_blank">
-                    <img src="~/images/BarneyFarmLogo.png" asp-controller="Product" asp-action="Products" class="footer-img" alt="Barney's farm Logo"/>
+                    <img src="~/images/BarneyFarmLogo.png" class="footer-img" alt="Barney's farm Logo"/>
                     </a>
                 </li>
                 <li>
                     <a href="https://honeypuffofficial.com" target="_blank">
-                    <img src="~/images/HoneyPuffLogo.jpeg" asp-controller="Service" asp-action="Services" class="footer-img" alt="HoneyPuff Logo">
+                    <img src="~/images/HoneyPuffLogo.jpeg" class="footer-img" alt="HoneyPuff Logo">
                     </a>
                 </li>
                 <li>
                     <a href="https://rawthentic.com" target="_blank">
-                    <img src="~/images/RawLogo.png" asp-controller="Order" asp-action="Orders" class="footer-img" alt="Raw Smoke Logo">
+                    <img src="~/images/RawLogo.png" class="footer-img" alt="Raw Smoke Logo">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://2fast4buds.com" target="_blank">
+                    <img src="~/images/fastbuds.jpg" class="footer-img" alt="2Fast4Buds Logo">
                     </a>
                 </li>
             </ul>
         </div>
         <div class="col-sm-12 col-md-4">
-            <h6 class="text-success footer-secondary-bottom pb-1">Services</h6>
+            <h6 class="text-success footer-secondary-bottom pb-1">Services & Social Media</h6>
             <ul class="footer-items">
                 <li>
                     <a asp-controller="Home" asp-action="Index" class="text-decoration-none">Assistive Growing</a>
@@ -132,7 +146,7 @@
                     <a asp-controller="Order" asp-action="Orders" class="text-decoration-none">Orders</a>
                 </li>
                 <li>
-                    <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none">Privacy</a>
+                    <a asp-controller="Home" asp-action="Privacy" class="text-decoration-none">Privacy</a>
                 </li>
             </ul>
         </div>
@@ -142,3 +156,5 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>
+
+@RenderSection("scripts", required: false)
