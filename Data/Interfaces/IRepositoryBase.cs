@@ -3,8 +3,8 @@
 	public interface IRepositoryBase<T>
 	{
 		T? FindById(int id);
-		IEnumerable<T> GetAll();
-		IEnumerable<T> GetFilteredCollection(string name, string productCategory, bool? isInStock);
+		List<T> GetAll();
+		List<T> GetFilteredCollection(object filters);
 		bool Save(T entity);
 		bool Update(T entity);
 		bool Delete(int id);

@@ -38,7 +38,7 @@ namespace GwanjaLoveProto.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
-            if ((ModelState.IsValid && ModelState["Email"].ValidationState == ModelValidationState.Valid    ) || (ModelState["Email"].ValidationState == ModelValidationState.Invalid && loginModel.SignInWithUserName && string.IsNullOrEmpty(loginModel.Email)))
+            if ((ModelState.IsValid && ModelState["Email"].ValidationState == ModelValidationState.Valid) || (ModelState["Email"].ValidationState == ModelValidationState.Invalid && loginModel.SignInWithUserName && string.IsNullOrEmpty(loginModel.Email)))
             {
                 AppUser? user = new AppUser();
                 user = loginModel.SignInWithUserName ? await _userManager.FindByNameAsync(loginModel.UserName) : await _userManager.FindByEmailAsync(loginModel.Email);
