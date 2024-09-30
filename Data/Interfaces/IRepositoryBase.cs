@@ -5,7 +5,9 @@
 		T? FindById(int id);
 		List<T> GetAll();
 		List<T> GetFilteredCollection(object filters);
-		bool Save(T entity);
+		bool IsEntityDuplicate(T entity);
+		private void RefreshMemory() { }
+		bool Add(T entity);
 		bool Update(T entity);
 		bool Delete(int id);
 	}

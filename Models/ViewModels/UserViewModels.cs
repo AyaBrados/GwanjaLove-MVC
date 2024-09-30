@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace GwanjaLoveProto.Models
+namespace GwanjaLoveProto.Models.ViewModels
 {
     public class LoginModel
     {

@@ -1,4 +1,4 @@
-namespace GwanjaLoveProto.Models
+namespace GwanjaLoveProto.Models.ViewModels
 {
     public class ErrorViewModel
     {
