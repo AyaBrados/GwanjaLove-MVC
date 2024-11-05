@@ -1,11 +1,11 @@
-﻿using GwanjaLoveProto.Models;
+﻿using GwanjaLoveProto.Data.Interfaces;
+using GwanjaLoveProto.Models;
 using GwanjaLoveProto.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Primitives;
 
 namespace GwanjaLoveProto.Controllers
 {
@@ -15,14 +15,16 @@ namespace GwanjaLoveProto.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IUnitOfWork Uow;
 
         public AccountController(SignInManager<AppUser> signInManager,
             UserManager<AppUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
+            Uow = unitOfWork;
         }
         
         public IActionResult Login(string returnUrl)
@@ -123,6 +125,12 @@ namespace GwanjaLoveProto.Controllers
         private void PopulateRoles()
         {
             ViewBag.Roles = new SelectList(_roleManager.Roles.Select(x => x.Name).ToList());
+        }
+
+        private async Task GetUserFavourites()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            ViewBag.Favourites = new SelectList(await Uow.UserFavouriteRepository.GetFilteredCollectionAsync(x => x.UserId == user.Id));
         }
     }
 }

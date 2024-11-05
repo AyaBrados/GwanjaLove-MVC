@@ -1,4 +1,4 @@
-using GwanjaLoveProto.Models;
+using GwanjaLoveProto.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

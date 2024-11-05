@@ -22,5 +22,8 @@ namespace GwanjaLoveProto.Data
 		public DbSet<StrainStickiness> StrainStickiness { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<KnowledgeBase> KnowledgeTerms { get; set; }
+        public DbSet<SurveyResponse> SurveyResponses { get; set; }
+        public DbSet<UserFavourite> UserFavourites { get; set; }
+        public DbSet<ShopSpecial> ShopSpecials { get; set; }
 	}
 }

@@ -13,5 +13,7 @@
 		public StrainStickiness? StrainStickiness { get; set; }
 		public required Category Category { get; set; }
         public List<OrderProduct>? OrderProducts { get; set; }
+		public double ProductCount { get; set; }
+		public byte[]? Image { get; set; }
     }
 }

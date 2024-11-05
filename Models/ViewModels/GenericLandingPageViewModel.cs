@@ -4,5 +4,6 @@
     {
         public List<T> Items { get; set; } = new List<T>();
         public bool? SuccessfullPersistence { get; set; }
+        public object? Filters { get; set; }
     }
 }

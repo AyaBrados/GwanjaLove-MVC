@@ -1,6 +1,7 @@
 ﻿document.addEventListener('DOMContentLoaded', function (e) {
     $("#loginModal").modal("show");
     $(".modal-backdrop").removeClass("modal-backdrop");
+    $("body").css("background-image", 'url("../images/Deep Cheese.jpg")');
 
     var signInUserNameRadio = document.getElementById("signInWithUserName");
     var signInEmailRadio = document.getElementById("signInWithEmail");
@@ -43,12 +44,12 @@ var listOfImages = [
     { count: 1, image: "../images/Granddaddy Purple Plant.jpg" },
     { count: 2, image: "../images/Sugar Leaf.jpg" },
 ];
-var imageCounter = 0;
+var imageCounter = 1;
 
-setInterval(function (e) {
+setInterval(function () {
+    interval = 3000;
     var imageToUse = listOfImages.find(x => x.count === imageCounter)?.image;
     $("body").css("background-image", 'url("' + imageToUse + '")');
-    $("body").css("background-size", "cover");
     imageCounter++
     if (imageCounter >= listOfImages.length)
         imageCounter = 0;

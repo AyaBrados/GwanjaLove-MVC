@@ -10,40 +10,41 @@ using static GwanjaLoveProto.Data.Implementations.GlobalHelpers;
 namespace GwanjaLoveProto.Controllers
 {
     [Authorize(Roles = "Administrator, Developer")]
-    public class QuestionController : Controller
+    public class ShopSpecialController : Controller
     {
         private readonly IUnitOfWork Uow;
         private readonly UserManager<AppUser> UserManager;
         private AppUser? CurrentUser;
 
-        public QuestionController(IUnitOfWork uow, UserManager<AppUser> userManager)
+        public ShopSpecialController(IUnitOfWork uow, UserManager<AppUser> userManager)
         {
             Uow = uow;
             UserManager = userManager;
         }
 
-        public async Task<IActionResult> Index(SurveyFilters? filters)
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(BaseFilters? filters)
         {
-            List<Question> values = new List<Question>();
+            List<ShopSpecial> values = new List<ShopSpecial>();
             if (filters != null)
             {
-                values = await Uow.QuestionRepository.GetFilteredCollectionAsync(a => (string.IsNullOrEmpty(filters.Name) || a.Name.Contains(filters.Name))
-                                                                                        && (filters.Survey == null || a.SurveyId == filters.Survey.Id));
+                values = await Uow.ShopSpecialRepository.GetFilteredCollectionAsync(a => (string.IsNullOrEmpty(filters.Name) || a.Name.Contains(filters.Name)));
             }
             else
             {
-                values = await Uow.QuestionRepository.GetAll();
+                values = await Uow.ShopSpecialRepository.GetAll();
             }
 
-            return View(new GenericLandingPageViewModel<Question> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence, Filters = filters ?? new SurveyFilters() });
+            return View(new GenericLandingPageViewModel<ShopSpecial> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence, Filters = filters ?? new BaseFilters() });
         }
 
-        public async Task<IActionResult> Question(int? id)
+        [AllowAnonymous]
+        public async Task<IActionResult> Special(int? id)
         {
             try
             {
                 if (id.HasValue)
-                    return View(await Uow.QuestionRepository.FindAsync(id.Value));
+                    return View(await Uow.ShopSpecialRepository.FindAsync(id.Value));
                 else
                     return View(null);
             }
@@ -58,8 +59,8 @@ namespace GwanjaLoveProto.Controllers
         {
             try
             {
-                await Uow.QuestionRepository.DeleteAsync(id);
-                return RedirectToAction("Index", new SurveyFilters { SuccessfulPersistence = Uow.Save() });
+                await Uow.ShopSpecialRepository.DeleteAsync(id);
+                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
             }
             catch
             {
@@ -74,14 +75,14 @@ namespace GwanjaLoveProto.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Add(Question question)
+        public async Task<IActionResult> Add(ShopSpecial special)
         {
             try
             {
                 await GetCurrentUser();
-                SetTransactionValues<Question>(ref question, true, CurrentUser.UserName);
-                await Uow.QuestionRepository.AddAsync(question);
-                return RedirectToAction("Index", new SurveyFilters { SuccessfulPersistence = Uow.Save() });
+                SetTransactionValues<ShopSpecial>(ref special, true, CurrentUser.UserName);
+                await Uow.ShopSpecialRepository.AddAsync(special);
+                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
             }
             catch
             {
@@ -95,14 +96,14 @@ namespace GwanjaLoveProto.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Question question)
+        public async Task<IActionResult> Update(ShopSpecial special)
         {
             try
             {
                 await GetCurrentUser();
-                SetTransactionValues<Question>(ref question, question.Active, CurrentUser.UserName);
-                Uow.QuestionRepository.Update(question);
-                return RedirectToAction("Index", new SurveyFilters { SuccessfulPersistence = Uow.Save() });
+                SetTransactionValues<ShopSpecial>(ref special, special.Active, CurrentUser.UserName);
+                Uow.ShopSpecialRepository.Update(special);
+                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
             }
             catch
             {
