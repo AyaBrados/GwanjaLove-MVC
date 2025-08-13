@@ -34,7 +34,7 @@ namespace GwanjaLoveProto.Controllers
                 values = await Uow.OrderReceiveMethodRepository.GetAll();
             }
 
-            return View(new GenericLandingPageViewModel<OrderReceiveMethod> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence, Filters = filters ?? new BaseFilters() });
+            return View(new GenericLandingPageViewModel<OrderReceiveMethod> { Items = values, SuccessfullPersistence = filters.SuccessfullPersistence, Filters = filters ?? new BaseFilters() });
         }
 
         public async Task<IActionResult> OrderReceiveMethod(int? id)
@@ -57,8 +57,16 @@ namespace GwanjaLoveProto.Controllers
         {
             try
             {
+                var orderReceive = await Uow.OrderReceiveMethodRepository.FindAsync(id);
                 await Uow.OrderReceiveMethodRepository.DeleteAsync(id);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new BaseFilters
+                {
+                    SuccessfullPersistence = new SuccessfullPersistenceViewModel
+                    {
+                        SuccessfulPersistence = Uow.Save(),
+                        EntityName = $"Order Receive Method: {orderReceive?.Name} successfully deleted."
+                    }
+                });
             }
             catch
             {
@@ -80,7 +88,14 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<OrderReceiveMethod>(ref orderReceiveMethod, true, CurrentUser.UserName);
                 await Uow.OrderReceiveMethodRepository.AddAsync(orderReceiveMethod);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new BaseFilters 
+                {
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Order Receive Method: {orderReceiveMethod.Name} successfully added."
+					}
+				});
             }
             catch
             {
@@ -101,7 +116,14 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<OrderReceiveMethod>(ref orderReceiveMethod, orderReceiveMethod.Active, CurrentUser.UserName);
                 Uow.OrderReceiveMethodRepository.Update(orderReceiveMethod);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new BaseFilters 
+                { 
+                    SuccessfullPersistence = new SuccessfullPersistenceViewModel 
+                    { 
+                        SuccessfulPersistence = Uow.Save(), 
+                        EntityName = $"Order Receive Method: {orderReceiveMethod?.Name} successfully deleted." 
+                    }
+                });
             }
             catch
             {

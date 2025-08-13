@@ -11,6 +11,11 @@
       "provider": "cdnjs",
       "library": "jquery@3.7.1",
       "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "twitter-bootstrap@5.3.7",
+      "destination": "wwwroot/lib/twitter-bootstrap/"
     }
   ]
 }

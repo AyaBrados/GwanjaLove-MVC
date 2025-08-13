@@ -1,9 +1,11 @@
-﻿@{
+﻿@using GwanjaLoveProto.Data.ComponentFilters;
+@{
     string? controller =
     ViewContext.RouteData.Values["controller"]?.ToString();
     string? action =
         ViewContext.RouteData.Values["action"]?.ToString();
     ViewData["returnUrl"] = !string.IsNullOrEmpty(controller) && !string.IsNullOrEmpty(action) ? $"/{controller}/{action}" : "/Home/Index";
+    ViewData["baseFilter"] = new BaseFilters();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -32,9 +34,20 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-controller="Home" asp-action="Index" id="homeAnchor">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Product" asp-action="Products">Products</a>
+                    <li class="nav-item dropdown">
+                        	<a class="nav-link dropdown-toggle"
+		                        id="productNavButton"
+		                        data-bs-toggle="dropdown" href="#"
+                                aria-expanded="false">
+		                        Products</a>
+                            <ul id="productNavOptions" aria-labelledby="productNavButton" class="dropdown-menu">
+                                <a class="text-dark dropdown-item" asp-controller="Product" asp-action="Products">Products</a>
+		                        <a class="text-dark dropdown-item" asp-controller="Category" asp-action="Index" asp-route-filters="@ViewData["baseFilter"]">Categories</a>
+                                <a class="dropdown-item" asp-controller="ShopSpecial" asp-action="Index" asp-route-filters="@ViewData["baseFilter"]">Specials</a>
+		                        <a class="dropdown-item" href="#">Nehalem</a>
+	                        </ul>
                     </li>
+		                    @* <a class="nav-link text-dark" asp-controller="ShopSpecial" asp-action="Index" asp-route-filters="@ViewData["baseFilter"]">Specials</a> *@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-controller="Order" asp-action="Orders">Orders</a>
                     </li>
@@ -50,6 +63,9 @@
                     {
                         <li class="nav-link">Hello, @User.Identity.Name
                             <img profile-user="@User.Identity.Name" src="" alt="User Profile Picture" />
+                        </li>
+                        <li class="nav-item">
+                            <a class="secondary-text-color" asp-controller="Cart" asp-action="Cart"><i class="fa-solid fa-cart-shopping"></i></a>
                         </li>
                         <li class="nav-item">
                             <form asp-controller="Account" asp-action="Logout" method="post">
@@ -78,7 +94,7 @@
 
     <footer class="row border-secondary-top px-2 footer-style rasta-radial-background" id="footer">
         <div class="col-sm-12 col-md-4 border-secondary-end">
-            <h6 class="text-success footer-secondary-bottom pb-1">Quick Links</h6>
+            <h6 class="text-warning footer-secondary-bottom pb-1">Quick Links</h6>
             <ul class="footer-items">
                 <li>
                     <a asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a>
@@ -101,7 +117,7 @@
             </span>
         </div>
         <div class="col-sm-12 col-md-4 border-secondary-end footer-style footer-scroll">
-            <h6 class="text-success footer-secondary-bottom pb-1">Logos</h6>
+            <h6 class="text-warning footer-secondary-bottom pb-1">Logos</h6>
             <ul class="footer-items overflow-auto">
                 <li>
                     <a href="http://tastypuff.com" target="_blank">
@@ -131,7 +147,7 @@
             </ul>
         </div>
         <div class="col-sm-12 col-md-4">
-            <h6 class="text-success footer-secondary-bottom pb-1">Services & Social Media</h6>
+            <h6 class="text-warning footer-secondary-bottom pb-1">Services & Social Media</h6>
             <ul class="footer-items">
                 <li>
                     <a asp-controller="Home" asp-action="Index" class="text-decoration-none">Assistive Growing</a>
@@ -152,6 +168,7 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 </body>

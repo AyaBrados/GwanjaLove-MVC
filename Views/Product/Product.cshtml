@@ -1,0 +1,121 @@
+﻿@using GwanjaLoveProto.Models.ViewModels
+@model GwanjaLoveProto.Models.ViewModels.ProductViewModel
+@{
+	ViewData["Title"] = Model.Product.Name; 
+}
+
+<div class="card col-6 p-0 card-background secondary-border">
+	<div class="row card-header-background">
+		<h4 class="card-header">@Model.Product.Name</h4>
+		<div>
+			<span class="float-end">Like(@Model.Favourites.Any(x => x.User.UserName == User.Identity?.Name) ? "d" : "")</span>&nbsp;<button class="(@Model.Favourites.Any(x => x.User.UserName == User.Identity?.Name) ? fa-solid fa-star : fa-regular fa-star" asp-controller="UserFavourite" asp-action="Favourite" asp-route-Model="@Model"></button>
+		</div>
+	</div>
+	<img class="card-img-top card-img-style" src="" entity-image="@Model.Product.Image" alt="@Model.Product.Name" />
+	<div class="card-body bg-warning">
+		<h5 class="card-title">Details of the @Model.Product.Name</h5>
+		<p class="card-text lead">
+			@Model.Product.Description
+		</p>
+		<div class="text-center">
+			<button type="button" class="card-link site-primary-background" asp-action="Products" asp-controller="Product">
+				more info
+			</button>
+			<button type="button" class="card-link site-primary-background" asp-action="Cart" asp-controller="Cart" asp-route-Model="@Model">
+				Add to <i class="fa-cart-shopping"></i>
+			</button>
+		</div>
+		@if (Model.Product.IsInStock)
+		{
+			<i class="fa fa-smile-o" style="background-color: green;"></i>
+		}
+		else
+		{
+			<i class="fa fa-frown-o" style="background-color: red;"></i>
+		}
+	</div>
+	<table class="card-footer table-borderless card-footer-style">
+		<thead>
+			<tr>
+				@if (Model.Product.Category.Name.Equals("Smokeables") || Model.Product.Category.Name.Equals("Plant"))
+				{
+					<td>THC <i class="fa-regular fa-percentage"></i></td>
+					if (Model.Product.Category.Name.Equals("Plant"))
+					{
+						<td class="px-md-2">Yield <i class="fa-brands fa-canadian-maple-leaf"></i></td>
+					}
+					<td class="px-md-2">Stickiness <i class="fa-solid fa-hands-asl-interpreting"></i></td>
+					<td class="px-md-2">Flavour <i class="fa-solid fa-bong"></i></td>
+					<td class="px-md-2">Aroma <i class="fa-solid fa-joint"></i></td>
+				}
+				else
+				{
+
+				}
+				<td>Price R/g</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				@if (Model.Product.Category.Name.Equals("Smokeables") || Model.Product.Category.Name.Equals("Plant"))
+				{
+					<td>@Model.Product.THCPerc?.ToString()</td>
+					if (Model.Product.Category.Name.Equals("Plant"))
+					{
+						<td class="ps-md-2">@Model.Product.Yield</td>
+					}
+					<td class="ps-md-2">@Model.Product.StrainStickiness?.Description</td>
+					<td class="px-md-2">@Model.Product.Flavour</td>
+					<td class="px-md-2">@Model.Product.Aroma</td>
+				}
+				<td>@Model.Product.Price.ToString("C")</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<hr />
+
+<div class="accordion" id="reviewsAccord">
+	<div class="accordion-item">
+		<h2 class="accordion-header" id="regularH1">
+			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#regularFirst" aria-expanded="true"
+					aria-controls="regularFirst">
+				Reviews
+			</button>
+		</h2>
+		<!-- Leave a Review -->
+		<h2 class="accordion-header" id="leaveReview">
+			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#leaveReviewBody" aria-expanded="true"
+					aria-controls="leaveReviewBody">
+				Leave a Review
+			</button>
+		</h2>
+		<div id="leaveReviewBody" class="accordion-collapse collapse" aria-labelledby="#leaveReview" data-bs-parent="#reviewsAccord">
+			<div class="accordion-body">
+				<form method="post" asp-controller="SurveyResponse" asp-action="Add">
+					<h4 class="fw-bold">@User.Identity.Name</h4>
+					<span class="float-end">@Model.CurrentReview.Rating</span>
+
+					<textarea rows="6" class="border-secondary-top lead" asp-for="@Model.CurrentReview.Answer" placeholder="Please leave a Review">
+					</textarea>
+
+					<button type="submit" class="float-end site-primary-background survey-green-border">Review</button>
+				</form>
+			</div>
+		</div>
+		@foreach (SurveyResponse survey in Model.Reviews)
+		{			
+			<div id="regularFirst" class="accordion-collapse collapse" aria-labelledby="#regularH1" data-bs-parent="#reviewsAccord">
+				<div class="accordion-body">
+					<h4 class="fw-bold">@survey.UserFavourite?.User.UserName</h4>
+					<span class="float-end">@survey.Rating</span>
+
+					<p class="border-secondary-top lead">
+						@survey.Answer
+					</p>
+				</div>
+			</div>
+		}
+	</div>
+</div>

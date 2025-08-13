@@ -1,0 +1,7 @@
+﻿@using GwanjaLoveProto.Models.ViewModels
+@model SuccessfullPersistenceViewModel
+
+<div class="alert alert-dismissible border-2 border-radius (@Model.SuccessfulPersistence ? alert-success : alert-danger)">
+    <p>@Model.EntityName</p>
+    <button class="btn-close" data-bs-dismiss="alert" type="button" aria-label="Close"></button>
+</div>

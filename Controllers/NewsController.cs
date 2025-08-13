@@ -36,7 +36,7 @@ namespace GwanjaLoveProto.Controllers
                 values = await Uow.NewsRepository.GetAll();
             }
 
-            return View(new GenericLandingPageViewModel<News> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence, Filters = filters ?? new NewsFilters() });
+            return View(new GenericLandingPageViewModel<News> { Items = values, SuccessfullPersistence = filters?.SuccessfullPersistence, Filters = filters ?? new NewsFilters() });
         }
 
         [AllowAnonymous]
@@ -60,9 +60,17 @@ namespace GwanjaLoveProto.Controllers
         {
             try
             {
+                var news = await Uow.NewsRepository.FindAsync(id);
                 await Uow.NewsRepository.DeleteAsync(id);
-                return RedirectToAction("Index", Uow.Save());
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"News Item: {news?.Name} successfully deleted."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -83,8 +91,15 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<News>(ref news, true, CurrentUser.UserName);
                 await Uow.NewsRepository.AddAsync(news);
-                return RedirectToAction("Index", Uow.Save());
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"News Item: {news?.Name} successfully added."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -104,8 +119,15 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<News>(ref news, news.Active, CurrentUser.UserName);
                 Uow.NewsRepository.Update(news);
-                return RedirectToAction("Index", Uow.Save());
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"News Item: {news?.Name} successfully updated."
+					}
+				});
+			}
             catch
             {
                 throw;

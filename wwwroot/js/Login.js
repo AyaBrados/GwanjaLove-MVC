@@ -15,10 +15,14 @@
     signInUserNameRadio.onclick = function (e) {
         $("#emailInput").hide("slow");
         $("#userNameInput").show("slow");
+        $("#emailInput").removeAttr("required");
+        $("#userNameInput").setAttribute("required");
     };
     signInEmailRadio.onclick = function (e) {
         $("#userNameInput").hide("slow");
         $("#emailInput").show("slow");
+        $("#userNameInput").removeAttr("required");
+        $("#emailInput").setAttribute("required");
     };
     signInEmailRadio.click();
     setFooterVisibility(true);

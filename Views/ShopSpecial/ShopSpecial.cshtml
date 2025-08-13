@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "ShopSpecial - Edit";
+}
+@using GwanjaLoveProto.Models;
+@model ShopSpecial;
+
+<form asp-controller="ShopSpecial" asp-action="Add" method="post" enctype="multipart/form-data" class="site-tertiary-background">
+    <h3 class="custom-card-header">@ViewBag.CardTitle</h3>
+    <partial model="@Model" name="_BaseEntityInfo" />
+
+    <div class="custom-card">
+        <div class="col-sm-12 col-md-4">
+            <label asp-for="SpecialPrice" class="form-label"></label>
+            <input asp-for="SpecialPrice" class="form-control" type="number" />
+        </div>
+
+        <div class="col-sm-12 col-md-4">
+            <label asp-for="Image" class="form-label"></label>
+            <input asp-for="Image" class="form-control" />
+        </div>
+
+        <div class="col-sm-12 col-md-4">
+            <label asp-for="SpecialProductId" class="form-label"></label>
+            <select asp-for="SpecialProductId" asp-items="@ViewBag.Products"></select>
+        </div>
+    </div>
+
+    <div class="custom-card">
+        <div class="col-sm-12 col-md-4 card-position">
+            <label asp-for="SpecialEndDate" class="form-label"></label>
+            <input asp-for="SpecialEndDate" class="form-control" type="datetime" />
+        </div>
+    </div>
+</form>
+

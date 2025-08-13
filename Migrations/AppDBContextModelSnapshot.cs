@@ -22,6 +22,48 @@ namespace GwanjaLoveProto.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("GwanjaLoveProto.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SetupDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SetupUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Cart");
+                });
+
             modelBuilder.Entity("GwanjaLoveProto.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -92,6 +134,74 @@ namespace GwanjaLoveProto.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CustomerLoyalties");
+                });
+
+            modelBuilder.Entity("GwanjaLoveProto.Models.ErrorLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SetupDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SetupUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ErrorLog");
+                });
+
+            modelBuilder.Entity("GwanjaLoveProto.Models.GeneralLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SetupDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SetupUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("GeneralLog");
                 });
 
             modelBuilder.Entity("GwanjaLoveProto.Models.KnowledgeBase", b =>
@@ -262,7 +372,7 @@ namespace GwanjaLoveProto.Migrations
                     b.Property<double>("ProductCount")
                         .HasColumnType("float");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("SetupDateTime")
@@ -272,11 +382,16 @@ namespace GwanjaLoveProto.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ShopSpecialId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ShopSpecialId");
 
                     b.ToTable("OrderProducts");
                 });
@@ -357,6 +472,9 @@ namespace GwanjaLoveProto.Migrations
                     b.Property<string>("Aroma")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CartId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -396,7 +514,15 @@ namespace GwanjaLoveProto.Migrations
                     b.Property<int?>("StrainTypeId")
                         .HasColumnType("int");
 
+                    b.Property<double?>("THCPerc")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("Yield")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CartId");
 
                     b.HasIndex("CategoryId");
 
@@ -485,16 +611,20 @@ namespace GwanjaLoveProto.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("CartId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("SetupDateTime")
                         .HasColumnType("datetime2");
@@ -509,11 +639,55 @@ namespace GwanjaLoveProto.Migrations
                     b.Property<decimal>("SpecialPrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("SpecialProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("SpecialProductId");
+
+                    b.ToTable("ShopSpecials");
+                });
+
+            modelBuilder.Entity("GwanjaLoveProto.Models.SpecialProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SetupDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SetupUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ShopSpecials");
+                    b.ToTable("SpecialProduct");
                 });
 
             modelBuilder.Entity("GwanjaLoveProto.Models.StrainStickiness", b =>
@@ -624,6 +798,9 @@ namespace GwanjaLoveProto.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Approved")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -631,6 +808,12 @@ namespace GwanjaLoveProto.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("SetupDateTime")
                         .HasColumnType("datetime2");
@@ -642,13 +825,20 @@ namespace GwanjaLoveProto.Migrations
                     b.Property<int>("SurveyId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserFavouriteId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductId");
+
                     b.HasIndex("SurveyId");
+
+                    b.HasIndex("UserFavouriteId");
 
                     b.ToTable("SurveyResponses");
                 });
@@ -672,6 +862,9 @@ namespace GwanjaLoveProto.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("SetupDateTime")
                         .HasColumnType("datetime2");
 
@@ -681,9 +874,13 @@ namespace GwanjaLoveProto.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserFavourites");
                 });
@@ -911,6 +1108,34 @@ namespace GwanjaLoveProto.Migrations
                     b.HasDiscriminator().HasValue("AppUser");
                 });
 
+            modelBuilder.Entity("GwanjaLoveProto.Models.Cart", b =>
+                {
+                    b.HasOne("GwanjaLoveProto.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("GwanjaLoveProto.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GwanjaLoveProto.Models.GeneralLog", b =>
+                {
+                    b.HasOne("GwanjaLoveProto.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GwanjaLoveProto.Models.KnowledgeBase", b =>
                 {
                     b.HasOne("GwanjaLoveProto.Models.Category", "Category")
@@ -951,17 +1176,25 @@ namespace GwanjaLoveProto.Migrations
 
                     b.HasOne("GwanjaLoveProto.Models.Product", "Product")
                         .WithMany("OrderProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("GwanjaLoveProto.Models.ShopSpecial", "Special")
+                        .WithMany()
+                        .HasForeignKey("ShopSpecialId");
 
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+
+                    b.Navigation("Special");
                 });
 
             modelBuilder.Entity("GwanjaLoveProto.Models.Product", b =>
                 {
+                    b.HasOne("GwanjaLoveProto.Models.Cart", null)
+                        .WithMany("Products")
+                        .HasForeignKey("CartId");
+
                     b.HasOne("GwanjaLoveProto.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
@@ -996,6 +1229,21 @@ namespace GwanjaLoveProto.Migrations
 
             modelBuilder.Entity("GwanjaLoveProto.Models.ShopSpecial", b =>
                 {
+                    b.HasOne("GwanjaLoveProto.Models.Cart", null)
+                        .WithMany("Specials")
+                        .HasForeignKey("CartId");
+
+                    b.HasOne("GwanjaLoveProto.Models.SpecialProduct", "Product")
+                        .WithMany()
+                        .HasForeignKey("SpecialProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("GwanjaLoveProto.Models.SpecialProduct", b =>
+                {
                     b.HasOne("GwanjaLoveProto.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -1007,13 +1255,44 @@ namespace GwanjaLoveProto.Migrations
 
             modelBuilder.Entity("GwanjaLoveProto.Models.SurveyResponse", b =>
                 {
+                    b.HasOne("GwanjaLoveProto.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
                     b.HasOne("GwanjaLoveProto.Models.Survey", "Survey")
                         .WithMany()
                         .HasForeignKey("SurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GwanjaLoveProto.Models.UserFavourite", "UserFavourite")
+                        .WithMany()
+                        .HasForeignKey("UserFavouriteId");
+
+                    b.Navigation("Product");
+
                     b.Navigation("Survey");
+
+                    b.Navigation("UserFavourite");
+                });
+
+            modelBuilder.Entity("GwanjaLoveProto.Models.UserFavourite", b =>
+                {
+                    b.HasOne("GwanjaLoveProto.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GwanjaLoveProto.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1065,6 +1344,13 @@ namespace GwanjaLoveProto.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GwanjaLoveProto.Models.Cart", b =>
+                {
+                    b.Navigation("Products");
+
+                    b.Navigation("Specials");
                 });
 
             modelBuilder.Entity("GwanjaLoveProto.Models.Category", b =>

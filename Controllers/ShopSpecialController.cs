@@ -35,7 +35,7 @@ namespace GwanjaLoveProto.Controllers
                 values = await Uow.ShopSpecialRepository.GetAll();
             }
 
-            return View(new GenericLandingPageViewModel<ShopSpecial> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence, Filters = filters ?? new BaseFilters() });
+            return View(new GenericLandingPageViewModel<ShopSpecial> { Items = values, SuccessfullPersistence = filters?.SuccessfullPersistence, Filters = filters ?? new BaseFilters() });
         }
 
         [AllowAnonymous]
@@ -54,25 +54,34 @@ namespace GwanjaLoveProto.Controllers
             }
         }
 
+        public async Task<IActionResult> ShopSpecial(ShopSpecial? special)
+        {
+            await GetProducts();
+            ViewBag.CardTitle = special != null ? $"Edit {special.Name}" : "Add new Special"; 
+            return View(special);
+        }
+
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
+                var special = await Uow.ShopSpecialRepository.FindAsync(id);
                 await Uow.ShopSpecialRepository.DeleteAsync(id);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {special?.Name} successfully deleted."
+					}
+				});
             }
             catch
             {
                 throw;
             }
         }
-
-        public IActionResult Add()
-        {
-            return View();
-        }
-
 
         [HttpPost]
         public async Task<IActionResult> Add(ShopSpecial special)
@@ -82,7 +91,14 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<ShopSpecial>(ref special, true, CurrentUser.UserName);
                 await Uow.ShopSpecialRepository.AddAsync(special);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {special?.Name} successfully added."
+					}
+				});
             }
             catch
             {
@@ -103,7 +119,14 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<ShopSpecial>(ref special, special.Active, CurrentUser.UserName);
                 Uow.ShopSpecialRepository.Update(special);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {special?.Name} successfully updated."
+					}
+				});
             }
             catch
             {
@@ -115,6 +138,11 @@ namespace GwanjaLoveProto.Controllers
         {
             string? userName = User.Identity?.Name;
             CurrentUser = await UserManager.FindByNameAsync(userName ?? "");
+        }
+
+        private async Task GetProducts()
+        {
+            ViewBag.Products = await Uow.ProductRepository.GetFilteredCollectionAsync(x => x.Active);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace GwanjaLoveProto.Controllers
                 values = await Uow.PaymentMethodRepository.GetAll();
             }
 
-            return View(new GenericLandingPageViewModel<PaymentMethod> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence, Filters = filters ?? new BaseFilters() });
+            return View(new GenericLandingPageViewModel<PaymentMethod> { Items = values, SuccessfullPersistence = filters?.SuccessfullPersistence, Filters = filters ?? new BaseFilters() });
         }
 
         public async Task<IActionResult> PaymentMethod(int? id)
@@ -57,9 +57,17 @@ namespace GwanjaLoveProto.Controllers
         {
             try
             {
+                var paymentMethod = await Uow.PaymentMethodRepository.FindAsync(id);
                 await Uow.PaymentMethodRepository.DeleteAsync(id);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new OrderFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {paymentMethod?.Name} successfully deleted."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -80,8 +88,15 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<PaymentMethod>(ref paymentMethod, true, CurrentUser.UserName);
                 await Uow.PaymentMethodRepository.AddAsync(paymentMethod);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new OrderFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {paymentMethod?.Name} successfully added."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -101,8 +116,15 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<PaymentMethod>(ref paymentMethod, paymentMethod.Active, CurrentUser.UserName);
                 Uow.PaymentMethodRepository.Update(paymentMethod);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new OrderFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {paymentMethod?.Name} successfully updated."
+					}
+				});
+			}
             catch
             {
                 throw;

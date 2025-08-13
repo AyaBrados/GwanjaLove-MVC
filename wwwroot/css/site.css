@@ -1,7 +1,3 @@
-html {
-  font-size: 14px;
-}
-
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -13,8 +9,9 @@ html {
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
+    font-size: 14px;
 }
 
 body {
@@ -52,11 +49,21 @@ body {
 .border-secondary-top {
     border: none;
     border-top: 2px solid #dc1414 !important;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+.secondary-text-color {
+    color: #dc1414;
 }
 
 .border-secondary-end {
     border: none;
     border-right: 2px solid #dc1414 !important;
+}
+
+.secondary-border {
+    border-right: 4px solid #dc1414;
 }
 
 .footer-items {
@@ -136,4 +143,46 @@ footer > div > ul > li > a:hover {
 
 .float-left {
     margin-right: auto;
+}
+
+.float-right {
+    margin-left: auto;
+}
+
+.border-radius {
+    border-radius: 10px;
+}
+
+.survey-green-border {
+    border: 4px solid #00ff00;
+    border-radius: 20px;
+}
+
+.custom-card-header {
+    box-shadow: 0 0 0 5px #00ff00, 0 0 0 5px #dc1414;
+}
+
+.custom-card {
+    width: 80vw;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    border-radius: 5px;
+    margin: 5px auto;
+}
+
+button {
+    border-radius: 7px;
+}
+
+.horizontal-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    width: 80vw;
+    height: 20vh;
+}
+
+.horizontal-tile {
+    flex: 0 0 auto;
+    width: 15vw;
+    height: 15vh;
 }

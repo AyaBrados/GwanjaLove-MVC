@@ -3,10 +3,10 @@
     public class Order : BaseModel
     {
         public required string UserId { get; set; }
-        public required int PaymentMethodId { get; set; }
-        public required int OrderRecieveMethodId { get; set; } 
-        public required PaymentMethod PaymentMethod { get; set; }
-        public required OrderReceiveMethod OrderReceiveMethod { get; set; }
+        public int PaymentMethodId { get; set; }
+        public int OrderRecieveMethodId { get; set; } 
+        public PaymentMethod PaymentMethod { get; set; }
+        public OrderReceiveMethod OrderReceiveMethod { get; set; }
         public bool OrderReceived { get; set; }
         public bool PaymentReceived { get; set; }
         public DateTime OrderDate { get; set; }

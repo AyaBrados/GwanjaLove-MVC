@@ -21,6 +21,9 @@ namespace GwanjaLoveProto.Data.Interfaces
         IRepositoryBase<ShopSpecial> ShopSpecialRepository { get; }
         IRepositoryBase<SurveyResponse> SurveyResponseRepository { get; }
         IRepositoryBase<UserFavourite> UserFavouriteRepository { get; }
+        IRepositoryBase<Cart> CartRepository { get; }
+        IRepositoryBase<GeneralLog> GeneralLogRepository { get; }
+        IRepositoryBase<ErrorLog> ErrorLogRepository { get; }
         bool Save();
     }
 }

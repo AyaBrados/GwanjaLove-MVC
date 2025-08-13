@@ -1,6 +1,41 @@
 ﻿@{
     ViewData["Title"] = "Home";
 }
+@if (ViewBag.Specials.Count > 0)
+{
+	<h3 class="fst-italic m-2">Specials &nbsp;<i class="fa fa-tags"></i></h3>
+
+	<div class="row horizontal-container">
+	@foreach(ShopSpecial special in ViewBag.Specials)
+	{
+			<div class="col-md-4 col-sm-12 card horizontal-tile">
+				<div class="col-12">
+					<div class="col-8"><h4 class="card-header card-header-background">@special.Name</h4></div>
+					<div class="col-4">@special.SpecialEndDate.ToLongDateString()</div>
+				</div>
+				<img class="card-img-top card-img-style" src="" entity-image="@special.Image" alt="@special.Name" />
+				<div class="card-body bg-warning">
+					<p class="card-text lead">
+						@special.Description
+					</p>
+					<div class="row text-center">
+						<button type="button" class="col-md-3 card-link site-primary-background" asp-action="Special" asp-controller="ShopSpecial" asp-route-id="@special.Id">
+							more info
+						</button>
+						<button type="button" class="col-md-3 card-link site-primary-background" asp-action="Cart" asp-controller="Cart" asp-route-product="@special">
+							Add to <i class="fa-cart-shopping"></i>
+						</button>
+						<div class="col-md-3">
+							<span class="fw-bold">Price R</span>
+							<span>@special.SpecialPrice.ToString("C")</span>
+						</div>
+					</div>
+				</div>
+			</div>
+	}
+	</div>
+}
+
 
 <div class="carousel slide carousel-fade carousel-dark carousel-container" id="homeCarousel" data-bs-ride="carousel" data-bs-interval="5000" data-pause="true" data-bs-wrap="true">
 	<div class="carousel-indicators">
@@ -46,78 +81,65 @@
 	<div class="col-sm-12 col-md-6 green-border float-md-start card-height">
 		<h3 class="text-center"><a asp-action="Products" asp-controller="Product" class="text-decoration-none">Products</a></h3>
         <div class="row">
-            <div class="card col-10 card-position p-0 card-background">
-				<h4 class="card-header card-header-background">Purple Kush</h4>
-                <img class="card-img-top card-img-style" src="~/images/purpleBud.jpg" alt="Light Purple tree inside!" />
-                <div class="card-body bg-warning">
-					<h5 class="card-title">Details of the bud</h5>
-                    <p class="card-text lead">
-                        Purple kush is a powerful indica dominant hybrid grown in the great outdoors. This strain has a great terpene profile and can be used to create top of the range
-						extracts!
-                    </p>
-					<div class="text-center">
-						<button type="button" class="card-link site-primary-background" asp-action="Products" asp-controller="Product">
-							more info
-						</button>
+			@foreach (Product product in ViewBag.Products)
+			{
+				<div class="card col-6 p-0 card-position card-background">
+					<h4 class="card-header card-header-background">@product.Name</h4>
+					<img class="card-img-top card-img-style" src="" entity-image="@product.Image" alt="@product.Name" />
+					<div class="card-body bg-warning">
+						<h5 class="card-title">Details of the @product.Category.Name</h5>
+						<p class="card-text lead">
+							@product.Description
+						</p>
+						<div class="text-center">
+							<button type="button" class="card-link site-primary-background" asp-action="Products" asp-controller="Product">
+								more info
+							</button>
+							<button type="button" class="card-link site-primary-background" asp-action="Cart" asp-controller="Cart" asp-route-product="@product">
+								Add to <i class="fa-cart-shopping"></i>
+							</button>
+						</div>
 					</div>
-                </div>
-                <table class="card-footer table-borderless card-footer-style">
-					<thead>
-						<tr>
-							<td>THC <i class="fa-regular fa-percentage"></i></td>
-							<td class="px-md-2">Stickiness <i class="fa-solid fa-hands-asl-interpreting"></i></td>
-							<td class="px-md-2">Flavour <i class="fa-solid fa-bong"></i></td>
-							<td class="px-md-2">Aroma <i class="fa-solid fa-joint"></i></td>
-							<td>Price R/g</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>23</td>
-							<td class="ps-md-2">Heavy</td>
-							<td class="px-md-2">Earthy, grape</td>
-							<td class="px-md-2">Sweet &amp; Tropical</td>
-							<td>25</td>
-						</tr>
-					</tbody>
-				</table>
-            </div>
-            <div class="card col-10 card-position p-0 card-background">
-				<h4 class="card-header card-header-background">Khalifa Kush</h4>
-				<img class="card-img-top" src="images/LightPurple.jpg" alt="Light Purple tree inside!" />
-				<div class="card-body bg-warning">
-					<h5 class="card-title">Details of the plant</h5>
-					<p class="card-text lead">
-						This tree has been carefully brought up within an indoor environment. Invest into this beautiful tree that can produce a great yield
-						of suculent buds.
-					</p>
-					<div class="text-center">
-						<button type="button" class="card-link site-primary-background" asp-action="Products" asp-controller="Product">
-							more info
-						</button>
-					</div>
+					<table class="card-footer table-borderless card-footer-style">
+						<thead>
+							<tr>
+								@if (product.Category.Name.Equals("Smokeables") || product.Category.Name.Equals("Plant"))
+								{
+									<td>THC <i class="fa-regular fa-percentage"></i></td>
+									if (product.Category.Name.Equals("Plant"))
+									{
+										<td class="px-md-2">Yield <i class="fa-brands fa-canadian-maple-leaf"></i></td>
+									}
+									<td class="px-md-2">Stickiness <i class="fa-solid fa-hands-asl-interpreting"></i></td>
+									<td class="px-md-2">Flavour <i class="fa-solid fa-bong"></i></td>
+									<td class="px-md-2">Aroma <i class="fa-solid fa-joint"></i></td>
+								}
+								else
+								{
+
+								}
+								<td>Price R/g</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								@if (product.Category.Name.Equals("Smokeables") || product.Category.Name.Equals("Plant"))
+								{
+									<td>@product.THCPerc?.ToString()</td>
+									if (product.Category.Name.Equals("Plant"))
+									{
+										<td class="ps-md-2">@product.Yield</td>
+									}
+									<td class="ps-md-2">@product.StrainStickiness?.Description</td>
+									<td class="px-md-2">@product.Flavour</td>
+									<td class="px-md-2">@product.Aroma</td>
+								}
+								<td>@product.Price.ToString("C")</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
-				<table class="card-footer table-borderless card-footer-style">
-					<thead>
-						<tr>
-							<td>THC <i class="fa-regular fa-percentage"></i></td>
-							<td class="px-md-2">Yield <i class="fa-brands fa-canadian-maple-leaf"></i></td>
-							<td class="px-md-2">Flavour <i class="fa-solid fa-bong"></i></td>
-							<td class="px-md-2">Aroma <i class="fa-solid fa-joint"></i></td>
-							<td>Price R</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Max 26</td>
-							<td class="ps-md-2">100g/m<sup>2</sup></td>
-							<td class="px-md-2">Earthy, spicy</td>
-							<td class="px-md-2">Earthy &amp; Potent</td>
-							<td>150</td>
-						</tr>
-					</tbody>
-				</table>
-            </div>
+			}
         </div>
 	</div>
 	<div class="col-sm-12 col-md-6 green-border float-md-end card-height">

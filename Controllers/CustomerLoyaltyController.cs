@@ -38,7 +38,7 @@ namespace GwanjaLoveProto.Controllers
                 values = await Uow.CustomerLoyaltyRepository.GetAll();
             }
 
-            return View(new GenericLandingPageViewModel<CustomerLoyalty> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence });
+            return View(new GenericLandingPageViewModel<CustomerLoyalty> { Items = values, SuccessfullPersistence = filters?.SuccessfullPersistence });
         }
 
         [AllowAnonymous]
@@ -62,9 +62,17 @@ namespace GwanjaLoveProto.Controllers
         {
             try
             {
+                var customerLoyalty = await Uow.CustomerLoyaltyRepository.FindAsync(id);
                 await Uow.CustomerLoyaltyRepository.DeleteAsync(id);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Category: {customerLoyalty?.Name} successfully deleted."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -85,8 +93,15 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<CustomerLoyalty>(ref customerLoyalty, true, CurrentUser.UserName);
                 await Uow.CustomerLoyaltyRepository.AddAsync(customerLoyalty);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Category: {customerLoyalty?.Name} successfully added."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -106,8 +121,15 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<CustomerLoyalty>(ref customerLoyalty, customerLoyalty.Active, CurrentUser.UserName);
                 Uow.CustomerLoyaltyRepository.Update(customerLoyalty);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Category: {customerLoyalty?.Name} successfully updated."
+					}
+				});
+			}
             catch
             {
                 throw;

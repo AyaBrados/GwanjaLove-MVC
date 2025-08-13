@@ -36,7 +36,7 @@ namespace GwanjaLoveProto.Controllers
                 values = await Uow.KnowledgeBaseRepository.GetAll();
             }
 
-            return View(new GenericLandingPageViewModel<KnowledgeBase> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence, Filters = filters ?? new BaseFilters() });
+            return View(new GenericLandingPageViewModel<KnowledgeBase> { Items = values, SuccessfullPersistence = filters?.SuccessfullPersistence, Filters = filters ?? new BaseFilters() });
         }
 
         [AllowAnonymous]
@@ -60,9 +60,17 @@ namespace GwanjaLoveProto.Controllers
         {
             try
             {
+                var item = await Uow.KnowledgeBaseRepository.FindAsync(id);
                 await Uow.KnowledgeBaseRepository.DeleteAsync(id);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Knowledge Item: {item?.Name} successfully deleted."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -83,8 +91,15 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<KnowledgeBase>(ref term, true, CurrentUser.UserName);
                 await Uow.KnowledgeBaseRepository.AddAsync(term);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Knowledge Item: {term?.Name} successfully added."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -104,8 +119,15 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<KnowledgeBase>(ref term, term.Active, CurrentUser.UserName);
                 Uow.KnowledgeBaseRepository.Update(term);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Knowledge Item: {term?.Name} successfully updated."
+					}
+				});
+			}
             catch
             {
                 throw;

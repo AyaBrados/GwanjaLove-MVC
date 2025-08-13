@@ -41,6 +41,9 @@ namespace GwanjaLoveProto.Data.Implementations
         public IRepositoryBase<ShopSpecial> ShopSpecialRepository => new RepositoryBase<ShopSpecial>(_appDbContext);
         public IRepositoryBase<SurveyResponse> SurveyResponseRepository => new RepositoryBase<SurveyResponse>(_appDbContext);
         public IRepositoryBase<UserFavourite> UserFavouriteRepository => new RepositoryBase<UserFavourite>(_appDbContext);
+        public IRepositoryBase<Cart> CartRepository => new RepositoryBase<Cart>(_appDbContext);
+        public IRepositoryBase<GeneralLog> GeneralLogRepository => new RepositoryBase<GeneralLog>(_appDbContext);
+        public IRepositoryBase<ErrorLog> ErrorLogRepository => new RepositoryBase<ErrorLog>(_appDbContext);
 
         public bool Save()
         {

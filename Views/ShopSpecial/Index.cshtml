@@ -1,0 +1,37 @@
+﻿@using GwanjaLoveProto.Models.ViewModels
+@model GenericLandingPageViewModel<ShopSpecial>
+
+<div class="green-border">
+	@foreach (ShopSpecial special in Model.Items)
+	{
+		<div class="card col-6 p-0 card-background">
+			<div class="row card-header-background">
+				<h4 class="card-header">@special.Name</h4>
+			</div>
+			<img class="card-img-top card-img-style" src="" entity-image="@special.Image" alt="@special.Name" />
+			<div class="card-body bg-warning">
+				<h5 class="card-title">Details of the @special.Name</h5>
+				<p class="card-text lead">
+					@special.Description
+				</p>
+				<div class="text-center">
+					<button type="button" class="card-link site-primary-background" asp-action="ShopSpecials" asp-controller="Special">
+						more info
+					</button>
+					<button type="button" class="card-link site-primary-background" asp-action="Cart" asp-controller="Cart" asp-route-special="@special">
+						Add to <i class="fa-cart-shopping"></i>
+					</button>
+				</div>
+				@if (special.SpecialEndDate <= DateTime.Today.AddDays(-7) && special.SpecialEndDate >= DateTime.Today.AddDays(7))
+				{
+					<i class="fa fa-smile-o" style="background-color: green;"></i>
+				}
+				else
+				{
+					<i class="fa fa-frown-o" style="background-color: red;"></i>
+				}
+				<i>Special (@special.SpecialEndDate <= DateTime.Today.AddDays(-7) && @special.SpecialEndDate >= DateTime.Today.AddDays(7) ? "On" "Off")</i>
+			</div>
+		</div>
+	}
+</div>

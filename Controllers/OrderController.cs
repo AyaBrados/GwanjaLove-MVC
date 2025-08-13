@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using static GwanjaLoveProto.Data.Implementations.GlobalHelpers;
+using GwanjaLoveProto.Data.Exceptions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace GwanjaLoveProto.Controllers
 {
@@ -44,7 +46,7 @@ namespace GwanjaLoveProto.Controllers
                 values = await Uow.OrderRepository.GetAll();
             }
 
-            return View(new GenericLandingPageViewModel<Order> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence, Filters = filters ?? new OrderFilters() });
+            return View(new GenericLandingPageViewModel<Order> { Items = values, SuccessfullPersistence = filters?.SuccessfullPersistence, Filters = filters ?? new OrderFilters() });
         }
 
         public async Task<IActionResult> Order(int? id)
@@ -67,9 +69,17 @@ namespace GwanjaLoveProto.Controllers
         {
             try
             {
+                var order = await Uow.OrderRepository.FindAsync(id);
                 await Uow.OrderRepository.DeleteAsync(id);
-                return RedirectToAction("Index", new OrderFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new OrderFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Order: {order?.Name} successfully deleted."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -83,39 +93,42 @@ namespace GwanjaLoveProto.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Checkout(Order order)
+        public async Task<IActionResult> Checkout(Cart cart)
         {
             try
             {
                 await GetCurrentUser();
-                var orderCount = await Uow.OrderRepository.GetFilteredCollectionAsync(x => CurrentUser == null || x.UserId == CurrentUser.Id);
-                orderCount.Add(order);
-                // Name is constructed through: Date of Order + orderCount for user + userName
-                order.Name = $"{DateTime.Now} {orderCount.Count} {CurrentUser?.UserName}";
-                order.Description = order.Name;
-                SetTransactionValues<Order>(ref order, true, CurrentUser.UserName);
-                await Uow.OrderRepository.AddAsync(order);
-                Dictionary<int, OrderProduct> orderedProducts = new Dictionary<int, OrderProduct>();
-                foreach (var orderedProduct in order.OrderProducts)
-                {
-                    var actualP = await Uow.ProductRepository.FindAsync(orderedProduct.Id);
-                    var product = new OrderProduct() 
-                    { 
-                        Name = order.Name,
-                        Description = $"{order.Name} - {actualP?.Name}",
-                        OrderId = order.Id,
-                        ProductId = orderedProduct.Id,
-                    };
-                    if (orderedProducts.ContainsKey(orderedProduct.Id))
-                        orderedProducts[orderedProduct.Id].ProductCount += 1;
-                    else
-                        orderedProducts.Add(orderedProduct.Id, product);
-                }
-                await Uow.OrderProductRepository.AddRangeAsync(orderedProducts.Values);
-                await HandleCustomerLoyalty(order, orderCount);
+                CheckCurrentUser(CurrentUser, User.Identity?.Name);
 
-                return RedirectToAction("Index", new OrderFilters { SuccessfulPersistence = Uow.Save() });
-            }
+                var orderCount = await Uow.OrderRepository.GetFilteredCollectionAsync(x => CurrentUser == null || x.UserId == CurrentUser.Id);
+                // Name is constructed through: Date of Order + orderCount for user + userName
+                var order = new Order
+                {
+                    Name = $"{DateTime.Now} {orderCount.Count + 1} {CurrentUser?.UserName}",
+                    Description = $"{DateTime.Now} {orderCount.Count + 1} {CurrentUser?.UserName}",
+                    UserId = CurrentUser.Id,
+				};
+
+                orderCount.Add(order);
+                SetTransactionValues<Order>(ref order, true, CurrentUser.UserName);
+
+                await Uow.OrderRepository.AddAsync(order);
+                cart.OrderId = order.Id;
+                Uow.CartRepository.Update(cart);
+
+                Dictionary<int, OrderProduct> orderedProducts = await ProcessOrderedGoods(cart, order, orderCount);
+                
+                await Uow.OrderProductRepository.AddRangeAsync(orderedProducts.Values);
+
+				return RedirectToAction("Index", new OrderFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Order: {order?.Name} successfully created."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -137,8 +150,15 @@ namespace GwanjaLoveProto.Controllers
                 Uow.OrderRepository.Update(order);
                 var orderCount = await Uow.OrderRepository.GetFilteredCollectionAsync(x => CurrentUser == null || x.UserId == CurrentUser.Id);
                 await HandleCustomerLoyalty(order, orderCount);
-                return RedirectToAction("Index", new OrderFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new OrderFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Order: {order?.Name} successfully updated."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -152,16 +172,18 @@ namespace GwanjaLoveProto.Controllers
 
         private async Task HandleCustomerLoyalty(Order order, List<Order> orderCount)
         {
-            var customerLoyalties = await Uow.CustomerLoyaltyRepository.GetFilteredCollectionAsync(x => (CurrentUser == null || x.UserId == CurrentUser.Id));
-            var customerLoyalty = customerLoyalties.FirstOrDefault();
+            var customerLoyalty = await Uow.CustomerLoyaltyRepository.FirstOrDefaultAsync(x => x.UserId == CurrentUser.Id);
+
             CustomerLoyalty loyalty = customerLoyalty ?? new CustomerLoyalty
             {
                 Name = CurrentUser.UserName,
                 Description = $"Loyalty for {CurrentUser.UserName}",
                 UserId = CurrentUser.Id
             };
+
             SetTransactionValues<CustomerLoyalty>(ref loyalty, customerLoyalty?.Active, CurrentUser?.UserName);
             loyalty.LoyaltyPoints = CalculateCustomerLoyalty(order, orderCount);
+
             if (customerLoyalty != null)
             {
                 Uow.CustomerLoyaltyRepository.Update(loyalty);
@@ -172,7 +194,51 @@ namespace GwanjaLoveProto.Controllers
             }
         }
 
-        private async Task GetCurrentUser()
+        private async Task<Dictionary<int, OrderProduct>> ProcessOrderedGoods(Cart cart, Order order, List<Order> orderCount)
+        {
+			Dictionary<int, OrderProduct> orderedProducts = new Dictionary<int, OrderProduct>();
+            var existingOrderProducts = await Uow.OrderProductRepository.GetFilteredCollectionAsync(x => x.OrderId == order.Id);
+
+			foreach (var orderedProduct in cart.Products)
+			{
+				var actualP = await Uow.ProductRepository.FindAsync(orderedProduct.Id);
+                var existingOrderP = existingOrderProducts.FirstOrDefault(x =>  x.OrderId == order.Id && x.ProductId == actualP.Id);
+
+				OrderProduct product = existingOrderP != null ? existingOrderP : new OrderProduct()
+				{
+					Name = order.Name,
+					Description = $"{order.Name} - {actualP?.Name}",
+					OrderId = order.Id,
+					ProductId = orderedProduct.Id,
+				};
+
+				if (orderedProducts.ContainsKey(orderedProduct.Id))
+                {
+					orderedProducts[orderedProduct.Id].ProductCount += 1;
+                }
+				else
+                {
+                    product.ProductCount = 1;
+					orderedProducts.Add(orderedProduct.Id, product);
+                }
+
+                if (existingOrderP != null)
+                {
+                    product.ProductCount = cart.Products.Where(x => x.Id == actualP.Id).Count() + existingOrderProducts.Where(x => x.ProductId == actualP.Id).Count();
+                    Uow.OrderProductRepository.Update(product);
+                }
+                else
+                {
+                    await Uow.OrderProductRepository.AddAsync(product);
+                }
+			}
+
+			await HandleCustomerLoyalty(order, orderCount);
+
+            return orderedProducts;
+		}
+
+		private async Task GetCurrentUser()
         {
             string? userName = User.Identity?.Name;
             CurrentUser = await UserManager.FindByNameAsync(userName ?? "");

@@ -15,5 +15,7 @@
         public List<OrderProduct>? OrderProducts { get; set; }
 		public double ProductCount { get; set; }
 		public byte[]? Image { get; set; }
+		public double? THCPerc { get; set; }
+		public int? Yield { get; set; }
     }
 }

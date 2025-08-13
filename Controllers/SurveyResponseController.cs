@@ -37,7 +37,7 @@ namespace GwanjaLoveProto.Controllers
                 values = await Uow.SurveyResponseRepository.GetAll();
             }
 
-            return View(new GenericLandingPageViewModel<SurveyResponse> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence, Filters = filters ?? new SurveyFilters() });
+            return View(new GenericLandingPageViewModel<SurveyResponse> { Items = values, SuccessfullPersistence = filters?.SuccessfullPersistence, Filters = filters ?? new SurveyFilters() });
         }
 
         [AllowAnonymous]
@@ -61,8 +61,16 @@ namespace GwanjaLoveProto.Controllers
         {
             try
             {
+                var surveyResponse = await Uow.SurveyResponseRepository.FindAsync(id);
                 await Uow.SurveyResponseRepository.DeleteAsync(id);
-                return RedirectToAction("Index", new SurveyFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new SurveyFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {surveyResponse?.Name} successfully deleted."
+					}
+				});
             }
             catch
             {
@@ -85,7 +93,14 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<SurveyResponse>(ref SurveyResponse, true, CurrentUser?.UserName);
                 await Uow.SurveyResponseRepository.AddAsync(SurveyResponse);
-                return RedirectToAction("Index", new SurveyFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new SurveyFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {SurveyResponse?.Name} successfully added."
+					}
+				});
             }
             catch
             {
@@ -107,7 +122,14 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<SurveyResponse>(ref SurveyResponse, SurveyResponse.Active, CurrentUser?.UserName);
                 Uow.SurveyResponseRepository.Update(SurveyResponse);
-                return RedirectToAction("Index", new SurveyFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new SurveyFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {SurveyResponse?.Name} successfully updated."
+					}
+				});
             }
             catch
             {

@@ -1,4 +1,5 @@
-﻿using GwanjaLoveProto.Data.ComponentFilters;
+﻿using Azure.Core.Pipeline;
+using GwanjaLoveProto.Data.ComponentFilters;
 using GwanjaLoveProto.Data.Interfaces;
 using GwanjaLoveProto.Models;
 using GwanjaLoveProto.Models.ViewModels;
@@ -31,7 +32,12 @@ namespace GwanjaLoveProto.Controllers
             else
                 values = await Uow.CategoryRepository.GetAll();
 
-            return View(new GenericLandingPageViewModel<Category> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence, Filters = filters ?? new BaseFilters() });
+            return View(new GenericLandingPageViewModel<Category> { Items = values, SuccessfullPersistence = filters?.SuccessfullPersistence, Filters = filters ?? new BaseFilters() });
+        }
+
+        public async Task<IActionResult> GetProducts(Category category)
+        {
+            return RedirectToAction("Product", "Index", new ProductLandingFilters { Category = category });
         }
 
         public async Task<IActionResult> Category(int id)
@@ -51,9 +57,17 @@ namespace GwanjaLoveProto.Controllers
         {
             try
             {
+                var category = await Uow.CategoryRepository.FindAsync(id);
                 await Uow.CategoryRepository.DeleteAsync(id);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Category: {category?.Name} successfully deleted."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -74,8 +88,15 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<Category>(ref category, true, CurrentUser?.UserName);
                 await Uow.CategoryRepository.AddAsync(category);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Category: {category?.Name} successfully added."
+					}
+				});
+			}
             catch
             {
                 throw;
@@ -95,8 +116,15 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<Category>(ref category, category.Active, CurrentUser?.UserName);
                 Uow.CategoryRepository.Update(category);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
-            }
+				return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Category: {category?.Name} successfully updated."
+					}
+				});
+			}
             catch
             {
                 throw;

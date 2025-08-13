@@ -1,0 +1,18 @@
+﻿@using GwanjaLoveProto.Models.ViewModels
+@{
+    ViewData["Title"] = "Categories";
+}
+@model GenericLandingPageViewModel<Category>
+
+<div class="green-border">
+	@foreach (Category category in Model.Items)
+	{
+		<div class="card col-6 p-0 card-background">
+			<button type="button" class="card-link site-primary-background text-end" asp-action="Category" asp-controller="GetProducts" asp-route-category="@category">
+				Explore
+			</button>
+			<img class="card-img-top card-img-style" src="" entity-image="@category.Image" alt="@category.Name" />
+			<h4 class="card-header text-start">@category.Name</h4>
+		</div>
+	}
+</div>

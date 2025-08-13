@@ -35,7 +35,7 @@ namespace GwanjaLoveProto.Controllers
                 values = await Uow.SensamilliaServiceRepository.GetAll();
             }
 
-            return View(new GenericLandingPageViewModel<SensamilliaService> { Items = values, SuccessfullPersistence = filters?.SuccessfulPersistence, Filters = filters ?? new BaseFilters() });
+            return View(new GenericLandingPageViewModel<SensamilliaService> { Items = values, SuccessfullPersistence = filters?.SuccessfullPersistence, Filters = filters ?? new BaseFilters() });
         }
 
         [AllowAnonymous]
@@ -59,8 +59,16 @@ namespace GwanjaLoveProto.Controllers
         {
             try
             {
+                var service = await Uow.SensamilliaServiceRepository.FindAsync(id);
                 await Uow.SensamilliaServiceRepository.DeleteAsync(id);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {service?.Name} successfully deleted."
+					}
+				});
             }
             catch
             {
@@ -82,7 +90,14 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<SensamilliaService>(ref service, true, CurrentUser.UserName);
                 await Uow.SensamilliaServiceRepository.AddAsync(service);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {service?.Name} successfully added."
+					}
+				});
             }
             catch
             {
@@ -103,7 +118,14 @@ namespace GwanjaLoveProto.Controllers
                 await GetCurrentUser();
                 SetTransactionValues<SensamilliaService>(ref service, service.Active, CurrentUser.UserName);
                 Uow.SensamilliaServiceRepository.Update(service);
-                return RedirectToAction("Index", new BaseFilters { SuccessfulPersistence = Uow.Save() });
+                return RedirectToAction("Index", new BaseFilters
+				{
+					SuccessfullPersistence = new SuccessfullPersistenceViewModel
+					{
+						SuccessfulPersistence = Uow.Save(),
+						EntityName = $"Payment Method: {service?.Name} successfully updated."
+					}
+				});
             }
             catch
             {

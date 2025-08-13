@@ -25,5 +25,9 @@ namespace GwanjaLoveProto.Data
         public DbSet<SurveyResponse> SurveyResponses { get; set; }
         public DbSet<UserFavourite> UserFavourites { get; set; }
         public DbSet<ShopSpecial> ShopSpecials { get; set; }
+        public DbSet<Cart> Cart { get; set; }
+        public DbSet<ErrorLog> ErrorLog { get; set; }
+        public DbSet<GeneralLog> GeneralLog { get; set; }
+        public DbSet<GeneralLog> SpecialProduct { get; set; }
 	}
 }

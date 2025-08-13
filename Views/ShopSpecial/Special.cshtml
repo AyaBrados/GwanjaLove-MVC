@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Special";
+}
+@model ShopSpecial
+
+<div class="card col-6 p-0 card-background">
+	<div class="row card-header-background">
+		<h4 class="card-header">@Model.Name</h4>
+	</div>
+	<img class="card-img-top card-img-style" src="" entity-image="@Model.Image" alt="@Model.Name" />
+	<div class="card-body bg-warning">
+		<h5 class="card-title">Details of the @Model.Name</h5>
+		<p class="card-text lead">
+			@Model.Description
+		</p>
+		<div class="text-center">
+			<button type="button" class="card-link site-primary-background" asp-action="Cart" asp-controller="Cart" asp-route-special="@Model">
+				Add to <i class="fa-cart-shopping"></i>
+			</button>
+		</div>
+		@if (Model.SpecialEndDate <= DateTime.Today.AddDays(-7) && Model.SpecialEndDate >= DateTime.Today.AddDays(7))
+		{
+			<i class="fa fa-smile-o" style="background-color: green;"></i>
+		}
+		else
+		{
+			<i class="fa fa-frown-o" style="background-color: red;"></i>
+		}
+		<i>Special (@Model.SpecialEndDate <= DateTime.Today.AddDays(-7) && @Model.SpecialEndDate >= DateTime.Today.AddDays(7) ? "On" "Off")</i>
+	</div>
+</div>

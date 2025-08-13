@@ -1,0 +1,96 @@
+﻿@using GwanjaLoveProto.Models.ViewModels
+@using GwanjaLoveProto.Data.ComponentFilters
+@model GenericLandingPageViewModel<ProductViewModel> 
+@{
+	ViewData["Title"] = "Products";
+}
+
+@if (Model.SuccessfullPersistence != null)
+{
+	<partial name="_PersistenceMessage" model="Model.SuccessfullPersistence" />
+}
+<div class="row">
+	<div class="col-6 float-start">
+		<select asp-items="ViewBag.Sorting" asp-for="Filters.SortingAndPagingFilters.SortBy" class="pe-1"></select>
+		<select asp-items="ViewBag.SortDirection" asp-for="Filters.SortingAndPagingFilters.SortDirection"></select>
+	</div>
+	<div class="col-6 float-end">
+		<select asp-items="ViewBag.Categories" asp-for="Filters.Category"></select>
+	</div>
+</div>
+
+<div class="green-border">
+    @foreach (ProductViewModel product in Model.Items)
+    {
+		<div class="card col-6 p-0 card-background">
+			<div class="row card-header-background">
+				<h4 class="card-header">@product.Product.Name</h4>
+				<div>
+					<span>Like(@product.Favourites.Any(x => x.User.UserName == User.Identity?.Name) ? "d" : "")</span>&nbsp;<button class="(@product.Favourites.Any(x => x.User.UserName == User.Identity?.Name) ? fa-solid fa-star : fa-regular fa-star" asp-controller="UserFavourite" asp-action="Favourite" asp-route-product="@product"></button>
+				</div>
+			</div>
+			<img class="card-img-top card-img-style" src="" entity-image="@product.Product.Image" alt="@product.Product.Name" />
+			<div class="card-body bg-warning">
+				<h5 class="card-title">Details of the @product.Product.Name</h5>
+				<p class="card-text lead">
+					@product.Product.Description
+				</p>
+				<div class="text-center">
+					<button type="button" class="card-link site-primary-background" asp-action="Products" asp-controller="Product">
+						more info
+					</button>
+					<button type="button" class="card-link site-primary-background" asp-action="Cart" asp-controller="Cart" asp-route-product="@product">
+						Add to <i class="fa-cart-shopping"></i>
+					</button>
+				</div>
+				@if (product.Product.IsInStock)
+				{
+					<i class="fa fa-smile-o" style="background-color: green;"></i>
+				}
+				else
+				{
+					<i class="fa fa-frown-o" style="background-color: red;"></i>
+				}
+				<i>(@product.Product.IsInStock ? "Is" : "Not") In Stock</i>
+			</div>
+			<table class="card-footer table-borderless card-footer-style">
+				<thead>
+					<tr>
+						@if (product.Product.Category.Name.Equals("Smokeables") || product.Product.Category.Name.Equals("Plant"))
+						{
+							<td>THC <i class="fa-regular fa-percentage"></i></td>
+							if (product.Product.Category.Name.Equals("Plant"))
+							{
+								<td class="px-md-2">Yield <i class="fa-brands fa-canadian-maple-leaf"></i></td>
+							}
+							<td class="px-md-2">Stickiness <i class="fa-solid fa-hands-asl-interpreting"></i></td>
+							<td class="px-md-2">Flavour <i class="fa-solid fa-bong"></i></td>
+							<td class="px-md-2">Aroma <i class="fa-solid fa-joint"></i></td>
+						}
+						else
+						{
+							
+						}
+						<td>Price R/g</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						@if (product.Product.Category.Name.Equals("Smokeables") || product.Product.Category.Name.Equals("Plant"))
+						{
+							<td>@product.Product.THCPerc?.ToString()</td>
+							if (product.Product.Category.Name.Equals("Plant"))
+							{
+								<td class="ps-md-2">@product.Product.Yield</td>
+							}
+							<td class="ps-md-2">@product.Product.StrainStickiness?.Description</td>
+							<td class="px-md-2">@product.Product.Flavour</td>
+							<td class="px-md-2">@product.Product.Aroma</td>
+						}
+						<td>@product.Product.Price.ToString("C")</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+    }
+</div>

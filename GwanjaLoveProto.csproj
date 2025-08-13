@@ -26,7 +26,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\Extensions\" />
+    <Folder Include="Views\CustomerLoyalty\" />
+    <Folder Include="Views\Cart\" />
+    <Folder Include="Views\StrainType\" />
+    <Folder Include="Views\PaymentMethod\" />
+    <Folder Include="Views\OrderReceive\" />
+    <Folder Include="Views\Survey\" />
+    <Folder Include="Views\SensamilliaService\" />
+    <Folder Include="Views\Question\" />
+    <Folder Include="Views\Order\" />
+    <Folder Include="Views\News\" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,20 @@
+﻿@{
+}
+@model BaseModel;
+
+<div class="custom-card">
+    <div class="col-md-4 col-sm-12">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="col-md-4 col-sm-12">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="4" cols="6" />
+    </div>
+
+    <div class="col-md-4 col-sm-12">
+        <label asp-for="Active" class="form-label"></label>
+        <input asp-for="Active" class="form-control" type="checkbox" />
+    </div>
+</div>
